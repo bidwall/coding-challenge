@@ -15,7 +15,6 @@ namespace ConstructionLine.CodingChallenge.Tests
         [SetUp]
         public void Setup()
         {
-            
             var dataBuilder = new SampleDataBuilder(50000);
 
             _shirts = dataBuilder.CreateShirts();
@@ -25,7 +24,7 @@ namespace ConstructionLine.CodingChallenge.Tests
 
 
         [Test]
-        public void PerformanceTest()
+        public void PerformanceTest_50000Shirts_ProcessedUnder100ms()
         {
             var sw = new Stopwatch();
             sw.Start();
@@ -40,9 +39,10 @@ namespace ConstructionLine.CodingChallenge.Tests
             sw.Stop();
             Console.WriteLine($"Test fixture finished in {sw.ElapsedMilliseconds} milliseconds");
 
-            AssertResults(results.Shirts, options);
+            AssertResults(_shirts, options, results.Shirts);
             AssertSizeCounts(_shirts, options, results.SizeCounts);
             AssertColorCounts(_shirts, options, results.ColorCounts);
+            Assert.That(sw.ElapsedMilliseconds, Is.LessThan(100));
         }
     }
 }
