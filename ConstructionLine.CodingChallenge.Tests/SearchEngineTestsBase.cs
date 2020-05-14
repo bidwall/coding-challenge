@@ -6,17 +6,24 @@ namespace ConstructionLine.CodingChallenge.Tests
 {
     public class SearchEngineTestsBase
     {
-        protected static void AssertResults(List<Shirt> shirts, SearchOptions options, List<Shirt> resultShirts)
+        protected static void AssertResults(List<Shirt> shirts, SearchOptions options)
         {
-            Assert.That(resultShirts, Is.Not.Null);
+            Assert.That(shirts, Is.Not.Null);
 
-            foreach (var shirt in shirts.Where(shirt => 
-                    (!options.Colors.Any() || options.Colors.Contains(shirt.Color)) 
-                &&  (!options.Sizes.Any() || options.Sizes.Contains(shirt.Size))))
+            if (!options.Sizes.Any()) 
+                options.Sizes = Size.All;
+
+            if (!options.Colors.Any())
+                options.Colors = Color.All;
+
+            var sizeIds = options.Sizes.Select(s => s.Id).ToList();
+            var colorIds = options.Colors.Select(c => c.Id).ToList();
+            
+            foreach (var shirt in shirts)
             {
-                if (!resultShirts.Contains(shirt))
+                if (!sizeIds.Contains(shirt.Size.Id) || !colorIds.Contains(shirt.Color.Id))
                 {
-                    Assert.Fail($"'{shirt.Name}' with Size '{shirt.Size.Name}' and Color '{shirt.Color.Name}' not found in results, " +
+                    Assert.Fail($"'{shirt.Name}' with Size '{shirt.Size.Name}' and Color '{shirt.Color.Name}' found in results, " +
                                 $"when selected sizes where '{string.Join(",", options.Sizes.Select(s => s.Name))}' " +
                                 $"and colors '{string.Join(",", options.Colors.Select(c => c.Name))}'");
                 }

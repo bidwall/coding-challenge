@@ -39,7 +39,7 @@ namespace ConstructionLine.CodingChallenge.Tests
             sw.Stop();
             Console.WriteLine($"Test fixture finished in {sw.ElapsedMilliseconds} milliseconds");
 
-            AssertResults(_shirts, options, results.Shirts);
+            AssertResults(results.Shirts, options);
             AssertSizeCounts(_shirts, options, results.SizeCounts);
             AssertColorCounts(_shirts, options, results.ColorCounts);
             Assert.That(sw.ElapsedMilliseconds, Is.LessThan(100));
